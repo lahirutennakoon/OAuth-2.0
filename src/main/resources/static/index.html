@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Open Authorization (OAuth 2.0)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="assets/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="assets/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="assets/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="assets/css/util.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '2158770977669485',
+            cookie     : true,
+            xfbml      : true,
+            version    : 'v3.1'
+        });
+
+        FB.AppEvents.logPageView();
+
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+	// Check log-in status of user
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    }
+
+    function statusChangeCallback(response) {
+        console.log(response);
+        // Show invalid login alert if user credentials are invalid
+        if(response.authResponse === undefined)
+        {
+            document.getElementById("invalidLoginAlert").style.display = 'block';
+        }
+        else
+        {
+            console.log(response);
+
+            // Display user details
+            document.getElementById("userDetails").style.display = 'block';
+            getUser(response.authResponse.userID);
+            // window.location.href = "details.html";
+        }
+    }
+
+    // Get user's name
+    function getUser(userID) {
+        FB.api(
+            "/" + userID + "/",
+            function (response) {
+                if (response && !response.error) {
+                    console.log('user:');
+                    console.log(response);
+                    document.getElementById("userName").innerHTML = '<span class="label-input100">Name</span>\n' +
+                        '                            <input class="input100" type="text" name="userName" readonly value="' + response.name +
+                        '">' +
+                        '                            <span class="focus-input100"></span>';
+                }
+            }
+        );
+    }
+</script>
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title">
+					<span class="login100-form-title-1">
+						Sign In With Facebook
+					</span>
+				</div>
+
+                <form class="login100-form validate-form" id="loginForm">
+                    <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with"
+                         data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"
+                         scope="public_profile,email,user_posts,user_friends,user_photos"
+                         onlogin="checkLoginState();"></div>
+
+                    <div id="invalidLogin">
+                        <div class="alert alert-danger" style="display: none;" id="invalidLoginAlert">
+                            Invalid email and/or password!
+                        </div>
+                    </div>
+
+                    <div id="userDetails" style="display: none;">
+                        <div id="userName" class="wrap-input100 m-b-26">
+                        </div>
+                    </div>
+
+                </form>
+
+			</div>
+		</div>
+	</div>
+
+
+	
+<!--===============================================================================================-->
+	<script src="assets/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="assets/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="assets/vendor/bootstrap/js/popper.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="assets/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="assets/vendor/daterangepicker/moment.min.js"></script>
+	<script src="assets/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="assets/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="assets/js/main.js"></script>
+</body>
+</html>
