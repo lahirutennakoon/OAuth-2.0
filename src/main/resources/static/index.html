@@ -57,40 +57,62 @@
         });
     }
 
+    // Executed after login to Facebook
     function statusChangeCallback(response) {
-        console.log(response);
         // Show invalid login alert if user credentials are invalid
         if(response.authResponse === undefined)
         {
             document.getElementById("invalidLoginAlert").style.display = 'block';
         }
+        // If login is valid
         else
         {
-            console.log(response);
+            // Hide facebook login button
+            document.getElementById("facebookLoginBtn").style.display = 'none';
 
             // Display user details
             document.getElementById("userDetails").style.display = 'block';
-            getUser(response.authResponse.userID);
-            // window.location.href = "details.html";
+            getUserDetails(response.authResponse.userID);
         }
     }
 
-    // Get user's name
-    function getUser(userID) {
+    // Get user's details
+    function getUserDetails(userID) {
         FB.api(
-            "/" + userID + "/",
+            "/" + userID + "?fields=id,first_name,last_name,picture,email,friends",
             function (response) {
                 if (response && !response.error) {
-                    console.log('user:');
-                    console.log(response);
-                    document.getElementById("userName").innerHTML = '<span class="label-input100">Name</span>\n' +
-                        '                            <input class="input100" type="text" name="userName" readonly value="' + response.name +
-                        '">' +
-                        '                            <span class="focus-input100"></span>';
+                    // Set user's name
+                    document.getElementById("userName").innerHTML = '<span class="label-input100">Name</span>' +
+                        '<input class="input100" type="text" name="userName" readonly value="' +
+						response.first_name + response.last_name + '">' + '<span class="focus-input100"></span>';
+
+                    // Set user's email
+                    document.getElementById("email").innerHTML = '<span class="label-input100">Email</span>' +
+                        '<input class="input100" type="email" name="email" readonly value="' +
+                        response.email + '">' + '<span class="focus-input100"></span>';
+
+                    // Set user's profile picture
+                    document.getElementById("image").innerHTML = '<img src="' + response.picture.data.url + '" ' +
+						'style="width: 25em; height: 25em;">';
+
+                    // Set user's friends
+                    document.getElementById("friends").innerHTML = '<span class="label-input100">Friends</span>' +
+                        '<input class="input100" type="number" readonly value="' +
+                        response.friends.summary.total_count + '">' + '<span class="focus-input100"></span>';
+
                 }
             }
         );
     }
+
+    // Logout a user
+	function logout() {
+        FB.logout(function(response) {
+            // user is now logged out
+        });
+    }
+
 </script>
 
 	<div class="limiter">
@@ -98,7 +120,7 @@
 			<div class="wrap-login100">
 				<div class="login100-form-title">
 					<span class="login100-form-title-1">
-						Sign In With Facebook
+						View Your Facebook Account Details
 					</span>
 				</div>
 
@@ -106,7 +128,7 @@
                     <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with"
                          data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="false"
                          scope="public_profile,email,user_posts,user_friends,user_photos"
-                         onlogin="checkLoginState();"></div>
+                         onlogin="checkLoginState();" id="facebookLoginBtn"></div>
 
                     <div id="invalidLogin">
                         <div class="alert alert-danger" style="display: none;" id="invalidLoginAlert">
@@ -114,9 +136,16 @@
                         </div>
                     </div>
 
-                    <div id="userDetails" style="display: none;">
-                        <div id="userName" class="wrap-input100 m-b-26">
-                        </div>
+                    <div id="userDetails" style="display: none;" class="col-12">
+						<div class="container-login100-form-btn">
+							<button class="login100-form-btn" onclick="logout()">
+								Logout
+							</button>
+						</div>
+                        <div id="userName" class="wrap-input100 m-b-26"></div>
+						<div id="email" class="wrap-input100 m-b-26"></div>
+						<div id="image" class="wrap-input100 m-b-26"></div>
+						<div id="friends" class="wrap-input100 m-b-26"></div>
                     </div>
 
                 </form>
