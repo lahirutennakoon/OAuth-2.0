@@ -15,6 +15,7 @@ This web application demonstrates how to implement OAuth 2.0 using the Facebook 
 <b>Procedure:</b>
 <ol>
   <li>Download or clone the project.</li>
+  <li>Enter your Facebook App ID in the <i><b>index.html</b></i> file.</li> 
   <li>Go to the project folder location from the command prompt/terminal.</li>
   <li>Type "mvn clean install" to compile the application.</li>
   <li>After compilation is complete, type "java -jar target/oauth-2-0.0.1-SNAPSHOT.jar" to run the web application.</li>
